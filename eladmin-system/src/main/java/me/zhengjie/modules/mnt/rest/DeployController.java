@@ -19,6 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.mnt.domain.Deploy;
 import me.zhengjie.modules.mnt.domain.DeployHistory;
 import me.zhengjie.modules.mnt.service.DeployService;
@@ -50,7 +51,7 @@ import java.util.Set;
 @RequestMapping("/api/deploy")
 public class DeployController {
 
-	private final String fileSavePath = FileUtil.getTmpDirPath()+"/";
+	private final String fileSavePath = System.getProperty("java.io.tmpdir");
     private final DeployService deployService;
 
 
@@ -66,7 +67,7 @@ public class DeployController {
     @ApiOperation(value = "查询部署")
     @GetMapping
 	@PreAuthorize("@el.check('deploy:list')")
-    public ResponseEntity<Object> query(DeployQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getDeploys(DeployQueryCriteria criteria, Pageable pageable){
     	return new ResponseEntity<>(deployService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -75,8 +76,8 @@ public class DeployController {
     @PostMapping
 	@PreAuthorize("@el.check('deploy:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Deploy resources){
-		deployService.create(resources);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+		throw new BadRequestException("演示环境不可操作");
+//        return new ResponseEntity<>(deployService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改部署")

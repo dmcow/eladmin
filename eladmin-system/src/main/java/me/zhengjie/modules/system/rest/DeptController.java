@@ -26,7 +26,6 @@ import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.dto.DeptDto;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.ThrowableUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -96,6 +95,9 @@ public class DeptController {
     @PutMapping
     @PreAuthorize("@el.check('dept:edit')")
     public ResponseEntity<Object> update(@Validated(Dept.Update.class) @RequestBody Dept resources){
+        if(resources.getId() <= 11){
+            throw new BadRequestException("演示环境不可操作");
+        }
         deptService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -107,6 +109,9 @@ public class DeptController {
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         Set<DeptDto> deptDtos = new HashSet<>();
         for (Long id : ids) {
+            if(id <= 11){
+                throw new BadRequestException("演示环境不可操作");
+            }
             List<Dept> deptList = deptService.findByPid(id);
             deptDtos.add(deptService.findById(id));
             if(CollectionUtil.isNotEmpty(deptList)){

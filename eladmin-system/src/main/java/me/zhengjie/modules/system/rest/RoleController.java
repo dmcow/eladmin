@@ -27,7 +27,10 @@ import me.zhengjie.modules.system.service.dto.RoleDto;
 import me.zhengjie.modules.system.service.dto.RoleQueryCriteria;
 import me.zhengjie.modules.system.service.dto.RoleSmallDto;
 import me.zhengjie.utils.SecurityUtils;
+import me.zhengjie.utils.ThrowableUtil;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -108,6 +111,9 @@ public class RoleController {
     @PutMapping
     @PreAuthorize("@el.check('roles:edit')")
     public ResponseEntity<Object> update(@Validated(Role.Update.class) @RequestBody Role resources){
+        if(resources.getId() <= 1){
+            throw new BadRequestException("演示环境不可操作");
+        }
         getLevels(resources.getLevel());
         roleService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -118,6 +124,9 @@ public class RoleController {
     @PutMapping(value = "/menu")
     @PreAuthorize("@el.check('roles:edit')")
     public ResponseEntity<Object> updateMenu(@RequestBody Role resources){
+        if(resources.getId() <= 1){
+            throw new BadRequestException("演示环境不可操作");
+        }
         RoleDto role = roleService.findById(resources.getId());
         getLevels(role.getLevel());
         roleService.updateMenu(resources,role);
@@ -130,6 +139,9 @@ public class RoleController {
     @PreAuthorize("@el.check('roles:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         for (Long id : ids) {
+            if(id <= 1){
+                throw new BadRequestException("演示环境不可操作");
+            }
             RoleDto role = roleService.findById(id);
             getLevels(role.getLevel());
         }

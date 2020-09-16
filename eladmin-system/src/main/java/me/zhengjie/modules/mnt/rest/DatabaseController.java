@@ -49,7 +49,7 @@ import java.util.Set;
 @RequestMapping("/api/database")
 public class DatabaseController {
 
-	private final String fileSavePath = FileUtil.getTmpDirPath()+"/";
+	private final String fileSavePath = System.getProperty("java.io.tmpdir");
     private final DatabaseService databaseService;
 
 	@Log("导出数据库数据")
@@ -64,7 +64,7 @@ public class DatabaseController {
     @ApiOperation(value = "查询数据库")
     @GetMapping
 	@PreAuthorize("@el.check('database:list')")
-    public ResponseEntity<Object> query(DatabaseQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getDatabases(DatabaseQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(databaseService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -73,8 +73,8 @@ public class DatabaseController {
     @PostMapping
 	@PreAuthorize("@el.check('database:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Database resources){
-		databaseService.create(resources);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+		throw new BadRequestException("演示环境不可操作");
+//        return new ResponseEntity<>(databaseService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改数据库")

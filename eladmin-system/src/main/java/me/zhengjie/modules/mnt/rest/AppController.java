@@ -19,6 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.Log;
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.mnt.domain.App;
 import me.zhengjie.modules.mnt.service.AppService;
 import me.zhengjie.modules.mnt.service.dto.AppQueryCriteria;
@@ -37,8 +38,8 @@ import java.util.Set;
 * @date 2019-08-24
 */
 @RestController
-@RequiredArgsConstructor
 @Api(tags = "运维：应用管理")
+@RequiredArgsConstructor
 @RequestMapping("/api/app")
 public class AppController {
 
@@ -56,7 +57,7 @@ public class AppController {
     @ApiOperation(value = "查询应用")
     @GetMapping
 	@PreAuthorize("@el.check('app:list')")
-    public ResponseEntity<Object> query(AppQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getApps(AppQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(appService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -65,8 +66,8 @@ public class AppController {
     @PostMapping
 	@PreAuthorize("@el.check('app:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody App resources){
-        appService.create(resources);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        throw new BadRequestException("演示环境不可操作");
+//        return new ResponseEntity<>(appService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改应用")
