@@ -47,7 +47,6 @@ public class DeptController {
     private final DeptService deptService;
     private static final String ENTITY_NAME = "dept";
 
-    @Log("导出部门数据")
     @ApiOperation("导出部门数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('dept:list')")
@@ -55,7 +54,6 @@ public class DeptController {
         deptService.download(deptService.queryAll(criteria, false), response);
     }
 
-    @Log("查询部门")
     @ApiOperation("查询部门")
     @GetMapping
     @PreAuthorize("@el.check('user:list','dept:list')")
@@ -64,7 +62,6 @@ public class DeptController {
         return new ResponseEntity<>(PageUtil.toPage(deptDtos, deptDtos.size()),HttpStatus.OK);
     }
 
-    @Log("查询部门")
     @ApiOperation("查询部门:根据ID获取同级与上级数据")
     @PostMapping("/superior")
     @PreAuthorize("@el.check('user:list','dept:list')")
