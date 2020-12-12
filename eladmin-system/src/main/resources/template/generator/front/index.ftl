@@ -85,19 +85,13 @@
             {{ dict.label.${column.dictName}[scope.row.${column.changeColumnName}] }}
           </template>
         </el-table-column>
-          <#elseif column.columnType != 'Timestamp'>
-        <el-table-column prop="${column.changeColumnName}" label="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>" />
                 <#else>
-        <el-table-column prop="${column.changeColumnName}" label="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.${column.changeColumnName}) }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column prop="${column.changeColumnName}" label="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>" />
                 </#if>
             </#if>
             </#list>
         </#if>
-        <el-table-column v-permission="['admin','${changeClassName}:edit','${changeClassName}:del']" label="操作" width="150px" align="center">
+        <el-table-column v-if="checkPer['admin','${changeClassName}:edit','${changeClassName}:del']" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
