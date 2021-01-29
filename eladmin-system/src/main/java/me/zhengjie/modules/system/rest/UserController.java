@@ -114,7 +114,7 @@ public class UserController {
     @ApiOperation("修改用户")
     @PutMapping
     @PreAuthorize("@el.check('user:edit')")
-    public ResponseEntity<Object> update(@Validated(User.Update.class) @RequestBody User resources){
+    public ResponseEntity<Object> update(@Validated(User.Update.class) @RequestBody User resources) throws Exception {
         if(resources.getId() <= 1){
             throw new BadRequestException("演示环境不可操作");
         }
