@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(User resources) {
+    public void update(User resources) throws Exception {
         User user = userRepository.findById(resources.getId()).orElseGet(User::new);
         ValidationUtil.isNull(user.getId(), "User", "id", resources.getId());
         User user1 = userRepository.findByUsername(resources.getUsername());
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
         }
         // 如果用户的角色改变
         if (!resources.getRoles().equals(user.getRoles())) {
-            redisUtils.del(CacheKey.DATE_USER + resources.getId());
+            redisUtils.del(CacheKey.DATA_USER + resources.getId());
             redisUtils.del(CacheKey.MENU_USER + resources.getId());
             redisUtils.del(CacheKey.ROLE_AUTH + resources.getId());
         }
