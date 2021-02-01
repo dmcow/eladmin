@@ -2,12 +2,6 @@
 spring:
   datasource:
     druid:
-      # 超过时间限制是否回收
-      remove-abandoned: true
-      # 超时时间；单位为秒 3分钟
-      remove-abandoned-timeout: 120
-      # 关闭abanded连接时输出错误日志
-      log-abandoned: true
       db-type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       url: jdbc:log4jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:eladmin}?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
