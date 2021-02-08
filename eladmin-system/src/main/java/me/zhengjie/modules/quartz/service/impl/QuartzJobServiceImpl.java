@@ -97,7 +97,9 @@ public class QuartzJobServiceImpl implements QuartzJobService {
                 throw new BadRequestException("子任务中不能添加当前任务ID");
             }
         }
+        resources.setIsPause(true);
         resources = quartzJobRepository.save(resources);
+
         quartzManage.updateJobCron(resources);
     }
 
